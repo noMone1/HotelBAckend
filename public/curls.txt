@@ -1,0 +1,40 @@
+// signup..
+curl --location '127.0.0.1:4000/api/auth/signup' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name":"adminUser",
+    "email":"admin@gmail.com",
+    "gender":"male",
+    "password":"123456"
+}'
+
+// login
+curl --location '127.0.0.1:4000/api/auth/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "email":"admin@gmail.com",
+    "password":"123456"
+}'
+
+//uploads
+curl --location '127.0.0.1:4000/api/upload/single' \
+--form 'file=@"/C:/Users/jenifer/Documents/sample beat.mp3"'
+
+//rooms add
+
+curl --location '127.0.0.1:4000/api/rooms' \
+--header 'accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWI5MWU4MzhhNWNhM2JhMWNjYWU4MmUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsIm5hbWUiOiJhZG1pblVzZXIiLCJpYXQiOjE3MDY3MTU1NjR9.8WTt0gQuWYew1sH4ECDE9sbWFKzbH4gNQWg-uf6xWA4' \
+--header 'Content-Type: application/json' \
+--data '{
+  "roomNumber": "101",
+  "type": "Deluxe",
+  "status": "Active",
+  "price": 150,
+  "images": ["image1.jpg", "image2.jpg"],
+  "hotel":"65ba65dd6ec8d1e62c65ba07"
+}
+'
+
+// uploads 
+curl --location '127.0.0.1:4000/uploads/1706632875676.mp3'
+
