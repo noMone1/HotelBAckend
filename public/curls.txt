@@ -38,3 +38,54 @@ curl --location '127.0.0.1:4000/api/rooms' \
 // uploads 
 curl --location '127.0.0.1:4000/uploads/1706632875676.mp3'
 
+// users.
+
+curl --location --request GET '127.0.0.1:4000/api/users' \
+--header 'accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWI5MWU4MzhhNWNhM2JhMWNjYWU4MmUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsIm5hbWUiOiJhZG1pblVzZXIiLCJpYXQiOjE3MDY3MTU1NjR9.8WTt0gQuWYew1sH4ECDE9sbWFKzbH4gNQWg-uf6xWA4' \
+--header 'Content-Type: application/json' \
+--data '{
+  "roomNumber": "107",
+  "type": "Standard",
+  "status": "Active",
+  "price": 1400,
+  "images": ["image1.jpg", "image2.jpg"],
+  "hotel":"65ba65dd6ec8d1e62c65ba07"
+}
+'
+
+// orders
+
+curl --location '127.0.0.1:4000/api/orders' \
+--header 'accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWI5MWU4MzhhNWNhM2JhMWNjYWU4MmUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsIm5hbWUiOiJhZG1pblVzZXIiLCJpYXQiOjE3MDY3MTU1NjR9.8WTt0gQuWYew1sH4ECDE9sbWFKzbH4gNQWg-uf6xWA4' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "customerName": "admin user",
+  "customerEmail": "admin@gmail.com",
+  "checkInDate": "2023-12-31T12:00:00Z",
+  "checkOutDate": "2024-01-05T12:00:00Z",
+  "roomId": "65ba69bb36d5f41c5ca96c19",
+  "userId":"65b91e838a5ca3ba1ccae82e"
+}
+
+'
+
+status are ['pending', 'confirmed', 'canceled','cancel_request','completed']
+
+
+// cms...
+curl --location '127.0.0.1:4000/api/cms' \
+--header 'accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWI5MWU4MzhhNWNhM2JhMWNjYWU4MmUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsIm5hbWUiOiJhZG1pblVzZXIiLCJpYXQiOjE3MDY3MTU1NjR9.8WTt0gQuWYew1sH4ECDE9sbWFKzbH4gNQWg-uf6xWA4' \
+--header 'Content-Type: application/json' \
+--data '{
+  "title": "Homepage Banner",
+  "content1": "Welcome to our website!",
+  "content2": "Welcome to our website!",
+  "type": "banner",
+  "images": [
+    "https://example.com/banner-image1.jpg",
+    "https://example.com/banner-image2.jpg"
+  ]
+}
+
+
+'
