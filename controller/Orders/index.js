@@ -24,13 +24,15 @@ const createOrder = async (req, res) => {
 
 
 const getAllOrders = async (req, res) => {
+    const {userId,start=0,limit=10} = req.query;
     try {
         let filter={};
         if(userId){
             filter.userId= mongoose.Types.ObjectId(req.user.id)
         }
-      const orders = await Order.find(filter);
-      res.json(orders);
+      const orders = await Order.find(filter).skip(+start).limit(+limit);
+      const totalCount = await Order.countDocuments(filter);
+      res.json({totalCount,data:orders});
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
