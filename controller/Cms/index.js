@@ -24,16 +24,16 @@ const createCms = async (req, res) => {
 
 
 // Get all CMS content
-const getAllCms = async () => {
+const getAllCms = async (req,res) => {
   try {
-    const {type} = req.body;
+    const {type,start = 0, limit = 10,} = req.query;
     let filter = {};
     if(type){
         filter.type = type
     }
-    const allCms = await Cms.find(filter);
+    const allCms = await Cms.find(filter).skip(+start).limit(+limit);
     const total = await Cms.countDocuments(filter);
-    res.status(200).json({data:allCms,totalCunt:total})
+    res.status(200).json({data:allCms,totalCount:total})
   } catch (error) {
     console.error(error);
     res.status(500).json({message:"internal server error"})
@@ -41,8 +41,9 @@ const getAllCms = async () => {
 };
 
 // Get a specific CMS content by ID
-const getCmsById = async (id) => {
+const getCmsById = async (req,res) => {
   try {
+    const {id} = req.params;
     const cms = await Cms.findById(id);
 
      res.status(200).json(cms)
@@ -82,7 +83,8 @@ const updateCmsById = async (req, res) => {
   };
 
 // Delete a specific CMS content by ID
-const deleteCmsById = async (id) => {
+const deleteCmsById = async (req,res) => {
+  const {id} = req.params;
   try {
     const deletedCms = await Cms.findByIdAndDelete(id);
     if (!deletedCms) {
