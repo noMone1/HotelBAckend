@@ -33,7 +33,7 @@ const getAllCms = async (req,res) => {
     }
     const allCms = await Cms.find(filter).skip(+start).limit(+limit);
     const total = await Cms.countDocuments(filter);
-    res.status(200).json({data:allCms,totalCunt:total})
+    res.status(200).json({data:allCms,totalCount:total})
   } catch (error) {
     console.error(error);
     res.status(500).json({message:"internal server error"})
