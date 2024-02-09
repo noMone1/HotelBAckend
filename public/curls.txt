@@ -55,7 +55,7 @@ curl --location --request GET '127.0.0.1:4000/api/users' \
 
 // orders
 
-curl --location '127.0.0.1:4000/api/orders' \
+curl --location '127.0.0.1:4001/api/orders' \
 --header 'accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NWI5MWU4MzhhNWNhM2JhMWNjYWU4MmUiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsIm5hbWUiOiJhZG1pblVzZXIiLCJpYXQiOjE3MDY3MTU1NjR9.8WTt0gQuWYew1sH4ECDE9sbWFKzbH4gNQWg-uf6xWA4' \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -64,6 +64,8 @@ curl --location '127.0.0.1:4000/api/orders' \
   "checkInDate": "2023-12-31T12:00:00Z",
   "checkOutDate": "2024-01-05T12:00:00Z",
   "roomId": "65ba69bb36d5f41c5ca96c19",
+    "roomType":"Standard",
+  "amountToBePaid":2000,
   "userId":"65b91e838a5ca3ba1ccae82e"
 }
 

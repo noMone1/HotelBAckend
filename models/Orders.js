@@ -20,8 +20,18 @@ const orderSchema = new mongoose.Schema({
   roomId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Room', // Assuming you have a Room model
+    required: false,
+  },
+  roomType: {
+    type: mongoose.Schema.Types.String,
+    required: true,
+    enum: ['Standard', 'Deluxe', 'Suite'],
+  },
+  amountToBePaid: {
+    type: mongoose.Schema.Types.Number,
     required: true,
   },
+  
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Assuming you have a Room model
@@ -29,8 +39,8 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'confirmed', 'canceled','cancel_request','completed'],
-    default: 'pending',
+    enum: ['room_allocated', 'confirmed', 'canceled','cancel_request','completed','payment_pending'],
+    default: 'confirmed',
   },
 });
 

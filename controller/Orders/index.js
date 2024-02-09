@@ -1,23 +1,32 @@
 const mongoose = require('mongoose');
 const Order = require('../../models/Orders');
+const Rooms = require('../../models/Rooms');
 
 // Create a new order
 const createOrder = async (req, res) => {
   try {
-    const { customerName, customerEmail, checkInDate, checkOutDate, roomId,userId } = req.body;
+    const { customerName, customerEmail, checkInDate, checkOutDate, roomId,userId,roomType,amountToBePaid } = req.body;
 
-    const newOrder = new Order({
+    const obj = {
       customerName,
       customerEmail,
       checkInDate,
-      checkOutDate,
-      roomId :new mongoose.Types.ObjectId(roomId),
-      userId :new mongoose.Types.ObjectId(userId),
-    });
+      roomType, // Assuming roomType is already defined in your code
+      checkOutDate,amountToBePaid
+    };
+    if(roomId){
+      let room = await Rooms.findOne({_id: new mongoose.Types.ObjectId(roomId),status:"Active"});
+      if(!room){return res.status(400).json({message:"Room is not available"})}
+
+      obj.roomId = new  mongoose.Types.ObjectId(roomId);
+    }
+    obj.userId = new mongoose.Types.ObjectId(userId);
+    const newOrder = new Order(obj);
 
     const savedOrder = await newOrder.save();
     res.json(savedOrder);
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: err.message });
   }
 };
@@ -59,19 +68,26 @@ const getAllOrders = async (req, res) => {
 
   const updateOrder = async (req, res) => {
     try {
-      const { customerName, customerEmail, checkInDate, checkOutDate, roomId,status } = req.body;
+      const { customerName, customerEmail, checkInDate, checkOutDate, roomId,status,roomType } = req.body;
+      const obj = {
+        customerName,
+        customerEmail,
+        checkInDate,
+        roomType, // Assuming roomType is already defined in your code
+        checkOutDate,
+        status
+      };
+      if(roomId){
+        let room = await Rooms.findOne({_id: new mongoose.Types.ObjectId(roomId),status:"Active"});
+        if(!room){return res.status(400).json({message:"Room is not available"})}
   
+        obj.roomId = new  mongoose.Types.ObjectId(roomId);
+      }
       const updatedOrder = await Order.findOneAndUpdate(
         {
-          _id: mongoose.Types.ObjectId(req.params.id)
+          _id:new mongoose.Types.ObjectId(req.params.id)
         },
-        {
-            customerName,
-            customerEmail,
-            checkInDate,
-            checkOutDate,
-            roomId,status
-          },
+        obj,
         { new: true }
       );
   
@@ -88,7 +104,7 @@ const getAllOrders = async (req, res) => {
   const cancelOrder = async (req, res) => {
     try {
       const deletedOrder = await Order.findOneAndUpdate({
-        _id: mongoose.Types.ObjectId(req.params.id)
+        _id:new  mongoose.Types.ObjectId(req.params.id)
       },{status:'cancel_request'});
   
       if (!deletedOrder) {
