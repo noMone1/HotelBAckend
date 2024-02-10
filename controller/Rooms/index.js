@@ -46,7 +46,7 @@ const updateRoom = async (req, res) => {
 
 const getAllRooms = async (req, res) => {
  try {
-const { start = 0, limit = 10, roomNumber,minPrice,maxPrice,type } = req.query;
+const { start = 0, limit = 10, roomNumber,minPrice,maxPrice,type,status } = req.query;
 
 const filter = {};
 if (roomNumber) { 
@@ -55,6 +55,9 @@ if (roomNumber) {
 }
 if (type) {
   filter.type = type;
+}
+if (status) {
+  filter.status = status;
 }
 if(minPrice && maxPrice){
     filter.price = { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) };

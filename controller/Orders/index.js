@@ -43,11 +43,18 @@ const createOrder = async (req, res) => {
 
 
 const getAllOrders = async (req, res) => {
-    const {userId,start=0,limit=10} = req.query;
+    const {userId,start=0,limit=10,search,status} = req.query;
     try {
         let filter={};
         if(userId){
             filter.userId= mongoose.Types.ObjectId(req.user.id)
+        }
+        if(status){
+            filter.status= status
+        }
+        if(search){
+          const regexRoomNumber = new RegExp('.*' + search + '.*');
+          filter.customerEmail=regexRoomNumber;
         }
       const orders = await Order.find(filter).skip(+start).limit(+limit);
       const totalCount = await Order.countDocuments(filter);
