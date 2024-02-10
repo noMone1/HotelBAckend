@@ -28,7 +28,7 @@ const orderSchema = new mongoose.Schema({
   },
   roomType: {
     type: mongoose.Schema.Types.String,
-    required: true,
+    required: false,
     enum: ['Standard', 'Deluxe', 'Suite'],
   },
   amountToBePaid: {

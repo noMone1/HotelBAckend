@@ -5,12 +5,12 @@ const Rooms = require('../../models/Rooms');
 // Create a new order
 const createOrder = async (req, res) => {
   try {
-    const { customerName, customerEmail, checkInDate, checkOutDate, roomId,userId,roomType,amountToBePaid } = req.body;
+    const { customerName, customerEmail, checkInDate, checkOutDate, roomId,userId,roomType,amountToBePaid,status } = req.body;
 
     const obj = {
       customerName,
       customerEmail,
-      checkInDate,
+      checkInDate,status,
       roomType, // Assuming roomType is already defined in your code
       checkOutDate,amountToBePaid
     };
