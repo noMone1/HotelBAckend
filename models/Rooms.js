@@ -5,6 +5,7 @@ const roomSchema = new mongoose.Schema({
   roomNumber: {
     type: String,
     required: true,
+    unique:true,
   },
   type: {
     type: String,
@@ -28,6 +29,11 @@ const roomSchema = new mongoose.Schema({
   images:{
     type:Array,
     required:false,
+  },
+  orderId:{
+    type:mongoose.Schema.Types.ObjectId,
+    required:false,
+    ref: 'Order',
   },
   created_by:{
     type: mongoose.Schema.Types.ObjectId,

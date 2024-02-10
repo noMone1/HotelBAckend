@@ -14,17 +14,27 @@ const createOrder = async (req, res) => {
       roomType, // Assuming roomType is already defined in your code
       checkOutDate,amountToBePaid
     };
+    obj.userId =userId?new mongoose.Types.ObjectId(userId):null;
+
     if(roomId){
       let room = await Rooms.findOne({_id: new mongoose.Types.ObjectId(roomId),status:"Active"});
       if(!room){return res.status(400).json({message:"Room is not available"})}
 
       obj.roomId = new  mongoose.Types.ObjectId(roomId);
+      obj.roomNumber = room.roomNumber;
+      const newOrder = new Order(obj);
+  
+      const savedOrder = await newOrder.save();
+      room.orderId= new mongoose.Types.ObjectId(savedOrder._id);
+      room.status= "Booked";
+      await room.save();
+      return res.status(200).json(savedOrder);
+    }else{
+      const newOrder = new Order(obj);
+  
+      let  savedOrder = await newOrder.save();
+      return res.status(200).json(savedOrder);
     }
-    obj.userId = new mongoose.Types.ObjectId(userId);
-    const newOrder = new Order(obj);
-
-    const savedOrder = await newOrder.save();
-    res.json(savedOrder);
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: err.message });
@@ -69,6 +79,9 @@ const getAllOrders = async (req, res) => {
   const updateOrder = async (req, res) => {
     try {
       const { customerName, customerEmail, checkInDate, checkOutDate, roomId,status,roomType } = req.body;
+      if(status==='Completed' && !roomId){
+        return res.status(400).json({ message: 'room Id is required when booking is completed' });
+      }
       const obj = {
         customerName,
         customerEmail,
@@ -78,10 +91,12 @@ const getAllOrders = async (req, res) => {
         status
       };
       if(roomId){
-        let room = await Rooms.findOne({_id: new mongoose.Types.ObjectId(roomId),status:"Active"});
+        var room = await Rooms.findOne({_id: new mongoose.Types.ObjectId(roomId),status:"Active"});
         if(!room){return res.status(400).json({message:"Room is not available"})}
   
         obj.roomId = new  mongoose.Types.ObjectId(roomId);
+        room.status="Booked"
+        obj.roomNumber=room.roomNumber;
       }
       const updatedOrder = await Order.findOneAndUpdate(
         {
@@ -94,8 +109,9 @@ const getAllOrders = async (req, res) => {
       if (!updatedOrder) {
         return res.status(400).json({ message: 'Order not found' });
       }
+      await room.save();
   
-      res.json(updatedOrder);
+      res.status(200).json(updatedOrder);
     } catch (err) {
       console.log(err);
       res.status(500).json({ message: err.message });

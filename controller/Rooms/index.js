@@ -49,8 +49,9 @@ const getAllRooms = async (req, res) => {
 const { start = 0, limit = 10, roomNumber,minPrice,maxPrice,type } = req.query;
 
 const filter = {};
-if (roomNumber) {
-  filter.roomNumber = roomNumber;
+if (roomNumber) { 
+  const regexRoomNumber = new RegExp('.*' + roomNumber + '.*');
+  filter.roomNumber = regexRoomNumber;
 }
 if (type) {
   filter.type = type;

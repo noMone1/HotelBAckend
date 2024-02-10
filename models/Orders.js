@@ -22,6 +22,10 @@ const orderSchema = new mongoose.Schema({
     ref: 'Room', // Assuming you have a Room model
     required: false,
   },
+  roomNumber: {
+    type: mongoose.Schema.Types.String,
+    required: false,
+  },
   roomType: {
     type: mongoose.Schema.Types.String,
     required: true,
@@ -35,7 +39,7 @@ const orderSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Assuming you have a Room model
-    required: true,
+    required: false,
   },
   status: {
     type: String,
