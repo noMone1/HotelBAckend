@@ -52,7 +52,7 @@ const getAllOrders = async (req, res) => {
     try {
         id= req.params.id
       const order = await Order.findOne({
-        _id: mongoose.Types.ObjectId(id),
+        _id: new mongoose.Types.ObjectId(id),
       });
   
       if (!order) {
@@ -97,6 +97,7 @@ const getAllOrders = async (req, res) => {
   
       res.json(updatedOrder);
     } catch (err) {
+      console.log(err);
       res.status(500).json({ message: err.message });
     }
   };
@@ -116,5 +117,16 @@ const getAllOrders = async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   };
+  const deletedOrder = async (req, res) => {
+    try {
+      const deletedOrder = await Order.findOneAndDelete({
+        _id:new  mongoose.Types.ObjectId(req.params.id)
+      });
+
+      res.json({ message: 'Order deleted successfully' });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  };
   
-  module.exports = { createOrder, getAllOrders, getOrderById, updateOrder, cancelOrder };
+  module.exports = { createOrder, getAllOrders, getOrderById, updateOrder, cancelOrder, deletedOrder };
