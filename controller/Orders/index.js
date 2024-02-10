@@ -98,8 +98,14 @@ const getAllOrders = async (req, res) => {
         status
       };
       if(roomId){
-        var room = await Rooms.findOne({_id: new mongoose.Types.ObjectId(roomId),status:"Active"});
-        if(!room){return res.status(400).json({message:"Room is not available"})}
+        var room = await Rooms.findOne({_id: new mongoose.Types.ObjectId(roomId)});
+        console.log(room.orderId.toString());
+        if(room.status==='Active'){
+          
+        }else if(room.status==='Booked' && room.orderId.toString() === req.params.id){
+
+        }
+        else{return res.status(400).json({message:"Room is not available"})}
   
         obj.roomId = new  mongoose.Types.ObjectId(roomId);
         room.status="Booked"
