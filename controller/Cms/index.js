@@ -60,8 +60,8 @@ const updateCmsById = async (req, res) => {
       const { id } = req.params;
   
       // Validate the required fields
-      if (!title || !content || !type) {
-        return res.status(400).json({ error: 'Title, content, and type are required fields' });
+      if (!title || !content1  || !type) {
+        return res.status(400).json({ error: 'Title, content1, and type are required fields' });
       }
   
       const updatedCms = await Cms.findByIdAndUpdate(id, {
@@ -72,7 +72,7 @@ const updateCmsById = async (req, res) => {
       }, { new: true });
   
       if (!updatedCms) {
-        return res.status(404).json({ error: 'CMS content not found' });
+        return res.status(400).json({ error: 'CMS content not found' });
       }
   
       return res.json(updatedCms);
