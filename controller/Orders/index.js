@@ -98,6 +98,8 @@ const getOrderById = async (req, res) => {
 };
 
 const updateOrder = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     const {
       customerName,
@@ -109,6 +111,8 @@ const updateOrder = async (req, res) => {
       roomType,
     } = req.body;
     if (status === "Completed" && !roomId) {
+      await session.abortTransaction();
+      session.endSession();
       return res
         .status(400)
         .json({ message: "room Id is required when booking is completed" });
@@ -125,19 +129,29 @@ const updateOrder = async (req, res) => {
       var room = await Rooms.findOne({
         _id: new mongoose.Types.ObjectId(roomId),
       });
-      console.log(room.orderId.toString());
-      if (room.status === "Active") {
-      } else if (
+      console.log(room.orderId.toString(),req.params.id);
+      if (
         room.status === "Booked" &&
         room.orderId.toString() === req.params.id
-      ) {
-      } else {
-        return res.status(400).json({ message: "Room is not available" });
-      }
+      ) { 
 
       obj.roomId = new mongoose.Types.ObjectId(roomId);
       room.status = "Booked";
       obj.roomNumber = room.roomNumber;
+
+      } 
+      else if (room.status === "Active") {
+      obj.roomId = new mongoose.Types.ObjectId(roomId);
+      room.status = "Booked";
+      obj.roomNumber = room.roomNumber;
+      
+      await Rooms.findByIdAndUpdate({_id:new mongoose.Types.ObjectId(roomId)},{status:"Active",orderId:null});
+
+      } else {
+        await session.abortTransaction();
+        session.endSession();
+        return res.status(400).json({ message: "Room is not available" });
+      }
     }
     const updatedOrder = await Order.findOneAndUpdate(
       {
@@ -148,12 +162,18 @@ const updateOrder = async (req, res) => {
     );
 
     if (!updatedOrder) {
+      await session.abortTransaction();
+      session.endSession();
       return res.status(400).json({ message: "Order not found" });
     }
     await room.save();
 
+    await session.commitTransaction();
+    session.endSession();
     res.status(200).json(updatedOrder);
   } catch (err) {
+    await session.abortTransaction();
+    session.endSession();
     console.log(err);
     res.status(500).json({ message: err.message });
   }
