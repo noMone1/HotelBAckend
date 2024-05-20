@@ -129,7 +129,7 @@ const updateOrder = async (req, res) => {
       var room = await Rooms.findOne({
         _id: new mongoose.Types.ObjectId(roomId),
       });
-      console.log(room.orderId.toString(),req.params.id);
+      // console.log(room.orderId.toString(),req.params.id);
       if (
         room.status === "Booked" &&
         room.orderId.toString() === req.params.id
